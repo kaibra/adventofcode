@@ -30,3 +30,18 @@
     (is (= true
            (sol/at-least-one-letter-twice-in-a-row "efeabatzzurewqbanem")))
     ))
+
+(deftest no-special-words
+  (testing ""
+    (is (= true
+           (sol/no-special-words "rrrrrrrrr")))
+    (is (= true
+           (sol/no-special-words "aaaaaaaaaaa")))
+    (is (= false
+           (sol/no-special-words "rrrxyrrrrrr")))
+    (is (= false
+           (sol/no-special-words "rrrpqrrrrrr")))
+    (is (= false
+           (sol/no-special-words "rrrcdrrrrrr")))
+    (is (= false
+           (sol/no-special-words "rrrabrrrrrr")))))

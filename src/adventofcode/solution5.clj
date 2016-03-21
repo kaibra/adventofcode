@@ -1,5 +1,6 @@
 (ns adventofcode.solution5
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [clojure.string :as cstr]))
 
 (defn is-vowel? [c]
   (not
@@ -20,12 +21,19 @@
        true
        (at-least-one-letter-twice-in-a-row (first i) (rest i))))))
 
+(defn no-special-words [i]
+  (not
+    (or
+      (cstr/includes? i "ab")
+      (cstr/includes? i "cd")
+      (cstr/includes? i "pq")
+      (cstr/includes? i "xy"))))
 
 (defn start []
   (with-open [rdr (io/reader "resources/5/input.txt")]
     (->> (line-seq rdr)
          (filter at-least-three-vowels)
          (filter at-least-one-letter-twice-in-a-row)
-
+         (filter no-special-words)
          (count)
          (println))))
