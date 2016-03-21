@@ -16,3 +16,17 @@
            (sol/at-least-three-vowels "x")))
     (is (= false
            (sol/at-least-three-vowels "ae")))))
+
+(deftest letter-twice
+  (testing ""
+    (is (= true
+           (sol/at-least-one-letter-twice-in-a-row "aa")))
+    (is (= false
+           (sol/at-least-one-letter-twice-in-a-row "aba")))
+    (is (= true
+           (sol/at-least-one-letter-twice-in-a-row "efeabba")))
+    (is (= false
+           (sol/at-least-one-letter-twice-in-a-row "efeabatzurewqbanem")))
+    (is (= true
+           (sol/at-least-one-letter-twice-in-a-row "efeabatzzurewqbanem")))
+    ))

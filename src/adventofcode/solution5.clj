@@ -10,10 +10,22 @@
   (let [vowels (filter is-vowel? (seq i))]
     (>= (count vowels) 3)))
 
+(defn at-least-one-letter-twice-in-a-row
+  ([i]
+   (at-least-one-letter-twice-in-a-row (first i) (rest i)))
+  ([p i]
+   (if (empty? i)
+     false
+     (if (= p (first i))
+       true
+       (at-least-one-letter-twice-in-a-row (first i) (rest i))))))
+
+
 (defn start []
   (with-open [rdr (io/reader "resources/5/input.txt")]
-    (-> (line-seq rdr)
-        (filter at-least-three-vowels)
+    (->> (line-seq rdr)
+         (filter at-least-three-vowels)
+         (filter at-least-one-letter-twice-in-a-row)
 
-        (count)
-        (println))))
+         (count)
+         (println))))
