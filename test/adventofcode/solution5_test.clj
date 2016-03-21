@@ -45,3 +45,8 @@
            (sol/no-special-words "rrrcdrrrrrr")))
     (is (= false
            (sol/no-special-words "rrrabrrrrrr")))))
+
+
+(deftest the-result
+  (is (= 236
+         (sol/start))))

@@ -11,15 +11,14 @@
   (let [vowels (filter is-vowel? (seq i))]
     (>= (count vowels) 3)))
 
-(defn at-least-one-letter-twice-in-a-row
-  ([i]
-   (at-least-one-letter-twice-in-a-row (first i) (rest i)))
-  ([p i]
-   (if (empty? i)
-     false
-     (if (= p (first i))
-       true
-       (at-least-one-letter-twice-in-a-row (first i) (rest i))))))
+(defn at-least-one-letter-twice-in-a-row [i]
+  (loop [the-rest (rest i)
+         p (first i)]
+    (if (empty? the-rest)
+      false
+      (if (= p (first the-rest))
+        true
+        (recur (rest the-rest) (first the-rest))))))
 
 (defn no-special-words [i]
   (not
@@ -35,5 +34,4 @@
          (filter at-least-three-vowels)
          (filter at-least-one-letter-twice-in-a-row)
          (filter no-special-words)
-         (count)
-         (println))))
+         (count))))
