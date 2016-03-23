@@ -29,9 +29,11 @@
       (cstr/includes? i "xy"))))
 
 (defn start []
+  (println "Starting solution nr. 5")
   (with-open [rdr (io/reader "resources/5/input.txt")]
     (->> (line-seq rdr)
          (filter at-least-three-vowels)
          (filter at-least-one-letter-twice-in-a-row)
          (filter no-special-words)
-         (count))))
+         (count)
+         (println))))

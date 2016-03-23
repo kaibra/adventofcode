@@ -3,7 +3,7 @@
             [clojure.core.async :as async]))
 
 (def total-width 1000)
-(def thread-pool-size 20)
+(def thread-pool-size 4)
 (def chan-size 1000)
 
 (def parsing-regex #"^(turn off|turn on|toggle) (\d{1,3}),(\d{1,3}) through (\d{1,3}),(\d{1,3})$")
