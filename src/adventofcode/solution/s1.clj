@@ -16,9 +16,5 @@
 (defn start []
   (println "Starting solution nr. 1")
   (with-open [rdr (io/reader "resources/1/input.txt")]
-    (-> (loop [the-seq (char-seq rdr)
-               floor 0]
-          (if (empty? the-seq)
-            floor
-            (recur (rest the-seq) (apply-cmd floor (first the-seq)))))
+    (-> (reduce apply-cmd 0 (char-seq rdr))
         (println))))
