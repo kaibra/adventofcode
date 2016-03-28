@@ -3,6 +3,25 @@
 solutions for http://adventofcode.com/   
 
 so far:   
+## 1a
+Starting solution nr. 1a
+280
+Execution time was  6 ms
+
+## 1b
+Starting solution nr. 1b
+1797
+Execution time was  4 ms
+
+## 2
+Starting solution nr. 2
+{:sum 1586300, :ribbon 3737498}
+Execution time was  11 ms
+
+## 3a
+Starting solution nr. 3
+2592
+Execution time was  10 ms
 
 ## 5
 ```
