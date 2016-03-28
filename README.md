@@ -19,9 +19,14 @@ Starting solution nr. 2
 Execution time was  11 ms
 
 ## 3a
-Starting solution nr. 3
+Starting solution nr. 3a
 2592
 Execution time was  10 ms
+
+## 3b
+Starting solution nr. 3b
+2360
+Execution time was  17 ms
 
 ## 5
 ```
