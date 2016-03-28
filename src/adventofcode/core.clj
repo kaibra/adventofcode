@@ -15,7 +15,8 @@
 (defn -main [& args]
   (timed!
     (cond
-      (= (first args) "1") (sol1/start)
+      (= (first args) "1a") (sol1/starta)
+      (= (first args) "1b") (sol1/startb)
       (= (first args) "5") (sol5/start)
       (= (first args) "6") (sol6/start)
       :default (println "nothing to do"))))
