@@ -1,12 +1,7 @@
 (ns adventofcode.solution.s1
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [adventofcode.solution.reading-files :as rf])
   (:import (java.io Reader)))
-
-(defn char-seq [^Reader rdr]
-  (let [c (.read rdr)]
-    (if (>= c 0)
-      (cons (char c) (lazy-seq (char-seq rdr)))
-      [])))
 
 (defn apply-cmd [floor cmd]
   (case cmd
@@ -16,13 +11,13 @@
 (defn starta []
   (println "Starting solution nr. 1a")
   (with-open [rdr (io/reader "resources/1/input.txt")]
-    (-> (reduce apply-cmd 0 (char-seq rdr))
+    (-> (reduce apply-cmd 0 (rf/char-seq rdr))
         (println))))
 
 (defn startb []
   (println "Starting solution nr. 1b")
   (with-open [rdr (io/reader "resources/1/input.txt")]
-    (-> (loop [the-seq (char-seq rdr)
+    (-> (loop [the-seq (rf/char-seq rdr)
                floor 0
                nr 0]
           (if (or
