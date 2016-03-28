@@ -1,4 +1,4 @@
-(ns adventofcode.solution5
+(ns adventofcode.solution.s5
   (:require [clojure.java.io :as io]
             [clojure.string :as cstr]))
 

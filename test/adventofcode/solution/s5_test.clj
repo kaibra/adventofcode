@@ -1,7 +1,7 @@
-(ns adventofcode.solution5-test
+(ns adventofcode.solution.s5-test
   (:require
     [clojure.test :refer :all]
-    [adventofcode.solution5 :as sol]))
+    [adventofcode.solution.s5 :as sol]))
 
 
 (deftest vowels
@@ -45,8 +45,3 @@
            (sol/no-special-words "rrrcdrrrrrr")))
     (is (= false
            (sol/no-special-words "rrrabrrrrrr")))))
-
-
-(deftest the-result
-  (is (= 236
-         (sol/start))))

@@ -1,7 +1,7 @@
-(ns adventofcode.solution6-test
+(ns adventofcode.solution.s6-test
   (:require
     [clojure.test :refer :all]
-    [adventofcode.solution6 :as sol]))
+    [adventofcode.solution.s6 :as sol]))
 
 (deftest parsing
   (with-redefs [sol/total-width 10]

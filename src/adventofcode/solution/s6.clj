@@ -1,4 +1,4 @@
-(ns adventofcode.solution6
+(ns adventofcode.solution.s6
   (:require [clojure.java.io :as io]
             [clojure.core.async :as async]))
 
