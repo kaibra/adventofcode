@@ -19,7 +19,8 @@
     (cond
       (= (first args) "1a") (sol1/starta)
       (= (first args) "1b") (sol1/startb)
-      (= (first args) "2a") (sol2/starta)
+      (= (first args) "2a") (sol2/start)
+      (= (first args) "2b") (sol2/start)
       (= (first args) "5") (sol5/start)
       (= (first args) "6") (sol6/start)
       :default (println "nothing to do"))))
