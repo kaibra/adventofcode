@@ -25,7 +25,7 @@
      :ribbon (+ ribbon (calc-ribbon l w h))}))
 
 (defn start []
-  (println "Starting solution nr. 2a")
+  (println "Starting solution nr. 2")
   (with-open [rdr (io/reader "resources/2/input.txt")]
     (-> (reduce calc-feets {:sum    0
                             :ribbon 0} (line-seq rdr))
