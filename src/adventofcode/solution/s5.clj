@@ -28,12 +28,51 @@
       (cstr/includes? i "pq")
       (cstr/includes? i "xy"))))
 
-(defn start []
-  (println "Starting solution nr. 5")
+(defn add-pair [result iseq]
+  (if (> (count iseq) 1)
+    (conj result (str (first iseq) (second iseq)))
+    result))
+
+(defn calc-pairs [i]
+  (loop [iseq i
+         result #{}]
+    (if (empty? iseq)
+      result
+      (recur (rest iseq) (add-pair result iseq)))))
+
+(defn two-pairs-of-any-letters [i]
+  (loop [all-pairs (calc-pairs i)]
+    (if (empty? all-pairs)
+      false
+      (or
+        (not (nil?
+               (re-find (re-pattern (str ".*" (first all-pairs) ".*" (first all-pairs) ".*")) i)))
+        (recur (rest all-pairs))))))
+
+(defn one-repeating-letter-with-sep [i]
+  (loop [the-seq i]
+    (if (empty? the-seq)
+      false
+      (or
+        (not (nil?
+               (re-find (re-pattern (str "^" (first the-seq) "." (first the-seq) ".*")) (apply str the-seq))))
+        (recur (rest the-seq))))))
+
+(defn starta []
+  (println "Starting solution nr. 5a")
   (with-open [rdr (io/reader "resources/5/input.txt")]
     (->> (line-seq rdr)
          (filter at-least-three-vowels)
          (filter at-least-one-letter-twice-in-a-row)
          (filter no-special-words)
+         (count)
+         (println))))
+
+(defn startb []
+  (println "Starting solution nr. 5b")
+  (with-open [rdr (io/reader "resources/5/input.txt")]
+    (->> (line-seq rdr)
+         (filter two-pairs-of-any-letters)
+         (filter one-repeating-letter-with-sep)
          (count)
          (println))))

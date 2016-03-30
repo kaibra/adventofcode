@@ -45,3 +45,36 @@
            (sol/no-special-words "rrrcdrrrrrr")))
     (is (= false
            (sol/no-special-words "rrrabrrrrrr")))))
+
+
+(deftest two-pairs-of-any-letters
+  (testing "not containing two pairs"
+    (is (= false
+           (sol/two-pairs-of-any-letters "aaa")
+           (sol/two-pairs-of-any-letters "xyxz"))))
+  (testing "containing two pairs"
+    (is (= true
+           (sol/two-pairs-of-any-letters "aaaa")
+           (sol/two-pairs-of-any-letters "xyxy")
+           (sol/two-pairs-of-any-letters "aabcdefgaa")))))
+
+(deftest calc-pairs
+  (testing "return a set of all pairs"
+    (is (= #{"aa"}
+           (sol/calc-pairs "aaa")))
+    (is (= #{"xy" "yx"}
+           (sol/calc-pairs "xyxy")))
+    (is (= #{"ab" "bc" "cd" "de" "ef"}
+           (sol/calc-pairs "abcdef")))))
+
+(deftest one-repeating-letter-with-sep
+  (testing "contains one repeating letter with sep"
+    (is (= true
+           (sol/one-repeating-letter-with-sep "aba")
+           (sol/one-repeating-letter-with-sep "abeae")
+           (sol/one-repeating-letter-with-sep "abcdefeghi"))))
+  (testing "contains no repeating letter with sep"
+    (is (= false
+           (sol/one-repeating-letter-with-sep "abb")
+           (sol/one-repeating-letter-with-sep "abeaf")
+           (sol/one-repeating-letter-with-sep "abcdefaghi")))))
