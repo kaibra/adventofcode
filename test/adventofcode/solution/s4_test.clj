@@ -35,10 +35,10 @@
 (deftest md5-validity
   (testing "should test for md5 validity"
     (is (= true
-           (s4/valid-md5? [0 0 0])))
+           (s4/starts-with-5-zeros? [0 0 0])))
     (is (= true
-           (s4/valid-md5? [0 0 1])))
+           (s4/starts-with-5-zeros? [0 0 1])))
     (is (= false
-           (s4/valid-md5? [0 0 16])))
+           (s4/starts-with-5-zeros? [0 0 16])))
     (is (= false
-           (s4/valid-md5? [0 0 -1])))))
+           (s4/starts-with-5-zeros? [0 0 -1])))))
