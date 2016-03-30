@@ -35,6 +35,18 @@
     (finally
       (swap! worker-count dec))))
 
+(defn execute-brightness-parallel [worker-count structure {:keys [cmd coordinates]}]
+  (try
+    (swap! worker-count inc)
+    (let [cmd-fn (case cmd
+                   "toggle" #(+ (get structure %) 2)
+                   "turn on" #(+ (get structure %) 1)
+                   "turn off" #(max 0 (- (get structure %) 1)))]
+      (doseq [coordinate coordinates]
+        (assoc! structure coordinate (cmd-fn coordinate))))
+    (finally
+      (swap! worker-count dec))))
+
 (defn wait-for-command-to-be-finished [worker-count work]
   (while (or
            (> (count (.buf work)) 0)
@@ -44,8 +56,11 @@
 (defn nr-of-switched-on-lights [structure]
   (count (filter true? (persistent! structure))))
 
-(defn start []
-  (println "Starting solution nr. 6")
+(defn total-brightness [structure]
+  (apply + (persistent! structure)))
+
+(defn starta []
+  (println "Starting solution nr. 6a")
   (with-open [rdr (io/reader "resources/6/input.txt")]
     (let [worker-count (atom 0)
           structure (transient (into [] (repeat (* total-width total-width) false)))
@@ -59,3 +74,19 @@
           (async/>!! work single-task))
         (wait-for-command-to-be-finished worker-count work))
       (println (nr-of-switched-on-lights structure)))))
+
+(defn startb []
+  (println "Starting solution nr. 6b")
+  (with-open [rdr (io/reader "resources/6/input.txt")]
+    (let [worker-count (atom 0)
+          structure (transient (into [] (repeat (* total-width total-width) 0)))
+          work (async/chan chan-size)]
+      (async/pipeline thread-pool-size
+                      (async/chan (async/dropping-buffer chan-size))
+                      (keep (partial execute-brightness-parallel worker-count structure))
+                      work)
+      (doseq [cmd-taks (map parse-to-cmd-tasks (line-seq rdr))]
+        (doseq [single-task cmd-taks]
+          (async/>!! work single-task))
+        (wait-for-command-to-be-finished worker-count work))
+      (println (total-brightness structure)))))
