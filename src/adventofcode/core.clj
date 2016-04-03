@@ -6,13 +6,14 @@
     [adventofcode.solution.s4 :as sol4]
     [adventofcode.solution.s5 :as sol5]
     [adventofcode.solution.s6 :as sol6]
-    )
+    [adventofcode.solution.s7 :as sol7])
+
   (:gen-class))
 
 (defmacro timed! [& body]
   `(let [start# (System/currentTimeMillis)
          result# ~@body
-         timetaken# (- (System/currentTimeMillis) start# )]
+         timetaken# (- (System/currentTimeMillis) start#)]
      (println "Execution time was " timetaken# "ms")
      result#))
 
@@ -31,4 +32,5 @@
       (= (first args) "5b") (sol5/startb)
       (= (first args) "6a") (sol6/starta)
       (= (first args) "6b") (sol6/startb)
+      (= (first args) "7a") (sol7/starta)
       :default (println "nothing to do"))))
