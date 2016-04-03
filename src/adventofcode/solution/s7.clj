@@ -76,10 +76,17 @@
     (is-var-assignment? line) (add-parsed-var-assignment circuit line)
     :default (throw (RuntimeException. (str "Not implemented: " line)))))
 
-; 956
 (defn starta []
   (println "Starting solution nr. 7a")
   (with-open [rdr (io/reader "resources/7/input.txt")]
     (let [the-circuit (reduce add-wire {} (line-seq rdr))]
+      (-> ((:calc-fn (get the-circuit "a")) the-circuit)
+          (println)))))
+
+(defn startb []
+  (println "Starting solution nr. 7b")
+  (with-open [rdr (io/reader "resources/7/input.txt")]
+    (let [the-circuit (reduce add-wire {} (line-seq rdr))]
+      (reset! (get-in the-circuit ["b" :state]) 956)
       (-> ((:calc-fn (get the-circuit "a")) the-circuit)
           (println)))))
