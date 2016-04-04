@@ -6,8 +6,9 @@
     [adventofcode.solution.s4 :as sol4]
     [adventofcode.solution.s5 :as sol5]
     [adventofcode.solution.s6 :as sol6]
-    [adventofcode.solution.s7 :as sol7])
-
+    [adventofcode.solution.s7 :as sol7]
+    [adventofcode.solution.s8 :as sol8]
+    )
   (:gen-class))
 
 (defmacro timed! [& body]
@@ -34,4 +35,5 @@
       (= (first args) "6b") (sol6/startb)
       (= (first args) "7a") (sol7/starta)
       (= (first args) "7b") (sol7/startb)
+      (= (first args) "8a") (sol8/starta)
       :default (println "nothing to do"))))
