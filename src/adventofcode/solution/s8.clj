@@ -31,9 +31,31 @@
     (println)
     (+ sum result)))
 
+(defn encoded-line [line]
+  (-> line
+      (s/replace "\\\"" "\\\\\\\"")
+      (s/replace "\\x" "\\\\x")
+      (#(str "\"\\\"" (subs % 1 (- (count %) 1)) "\\\"\""))))
+
+(defn add-count-to-sum-b [sum line]
+  (let [string-code (count line)
+        encoded-line (encoded-line line)
+        nr-of-ecoded-chars (count encoded-line)
+        result (- nr-of-ecoded-chars string-code)]
+    (println line)
+    (println encoded-line)
+    (println "-->" nr-of-ecoded-chars "-" string-code "=" result)
+    (println)
+    (+ sum result)))
 
 (defn starta []
   (println "Starting solution nr. 8a")
   (with-open [rdr (io/reader "resources/8/input.txt")]
     (let [the-circuit (reduce add-count-to-sum 0 (line-seq rdr))]
+      (-> the-circuit (println)))))
+
+(defn startb []
+  (println "Starting solution nr. 8b")
+  (with-open [rdr (io/reader "resources/8/input.txt")]
+    (let [the-circuit (reduce add-count-to-sum-b 0 (line-seq rdr))]
       (-> the-circuit (println)))))
