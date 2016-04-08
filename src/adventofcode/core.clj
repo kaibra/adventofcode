@@ -10,6 +10,7 @@
     [adventofcode.solution.s8 :as sol8]
     [adventofcode.solution.s9 :as sol9]
     [adventofcode.solution.s10 :as sol10]
+    [adventofcode.solution.s11 :as sol11]
     )
   (:gen-class))
 
@@ -43,4 +44,5 @@
       (= (first args) "9b") (sol9/startb)
       (= (first args) "10a") (sol10/starta)
       (= (first args) "10b") (sol10/startb)
+      (= (first args) "11a") (sol11/starta)
       :default (println "nothing to do"))))
