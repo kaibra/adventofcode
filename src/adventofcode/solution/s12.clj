@@ -14,5 +14,15 @@
 
 (defn startb []
   (println "Starting solution nr. 12b")
-  )
-
+  (let [json (json/read-str (slurp "resources/12/input.txt") :key-fn keyword)
+        sum (atom 0)]
+    (wlk/prewalk
+      (fn [i]
+        (when (number? i)
+          (swap! sum + i))
+        (if-not (and
+                  (map? i)
+                  (some true? (map #(= % "red") (vals i))))
+          i))
+      json)
+    (println @sum)))
