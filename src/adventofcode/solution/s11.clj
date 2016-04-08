@@ -108,12 +108,18 @@
 
 (defn find-next-valid-pwd [input-pwd]
   (loop [pwd input-pwd]
-    (if (valid-pwd? pwd)
-      pwd
-      (recur (increase (skip-invalid-chars pwd))))))
+    (let [next-pwd (increase (skip-invalid-chars pwd))]
+      (if (valid-pwd? next-pwd)
+        next-pwd
+        (recur next-pwd)))))
 
 (defn starta []
   (println "Starting solution nr. 11a")
   (let [input "hxbxwxba"]
+    (println (find-next-valid-pwd input))))
+
+(defn startb []
+  (println "Starting solution nr. 11b")
+  (let [input "hxbxxyzz"]
     (println (find-next-valid-pwd input))))
 
