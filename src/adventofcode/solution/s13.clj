@@ -16,7 +16,7 @@
        (fn [{:keys [s-combination] :as inp}]
          (let [first-guest (first s-combination)
                last-guest (last s-combination)]
-           (update inp :total-happiness + (get-in h-infos [first-guest last-guest]) (get-in h-infos [last-guest first-guest]))))
+           (update inp :total-happiness + (get-in h-infos [first-guest last-guest] 0) (get-in h-infos [last-guest first-guest] 0))))
        result)))
   ([total-happiness s-combination h-infos]
    (if (= [(last s-combination)] (keys h-infos))
@@ -28,8 +28,8 @@
              new-h-infos (dissoc h-infos last-guest)]
          (mapcat
            (fn [next-guest]
-             (let [lg-happ (get-in h-infos [last-guest next-guest])
-                   ng-happ (get-in h-infos [next-guest last-guest])]
+             (let [lg-happ (get-in h-infos [last-guest next-guest] 0)
+                   ng-happ (get-in h-infos [next-guest last-guest] 0)]
                (all-seating-combinations (+ total-happiness lg-happ ng-happ)
                                          (conj s-combination next-guest)
                                          new-h-infos)))
@@ -40,6 +40,15 @@
   (with-open [rdr (io/reader "resources/13/input.txt")]
     (let [h-infos (reduce add-happiness-info {} (line-seq rdr))]
       (->> (all-seating-combinations h-infos)
+           (sort-by :total-happiness)
+           (last)
+           (println)))))
+
+(defn startb []
+  (println "Starting solution nr. 13b")
+  (with-open [rdr (io/reader "resources/13/input.txt")]
+    (let [h-infos (reduce add-happiness-info {} (line-seq rdr))]
+      (->> (all-seating-combinations (merge h-infos {"Me" {}}))
            (sort-by :total-happiness)
            (last)
            (println)))))
