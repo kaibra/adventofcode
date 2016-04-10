@@ -35,8 +35,6 @@
            (first)
            (println)))))
 
-;not 1057 too low
-;not 1058 too low
 (defn inc-lead-scores [reindeer-scores leads]
   (reduce
     (fn [scores [lname _]]
