@@ -1,6 +1,5 @@
 (ns adventofcode.solution.s15
-  (:require [clojure.java.io :as io]
-            [clojure.core.async :as async]))
+  (:require [clojure.java.io :as io]))
 
 (defn ingredient-props [i-capacity i-durability i-flavor i-texture i-calories]
   {:capacity   i-capacity
@@ -59,18 +58,18 @@
           (range 0 (+ max-val 1))))
       [[{(first all-ingredient-names) max-val}]])))
 
+(defn keep-better-result [{old-score :score :as old-result} {next-score :score :as next-result}]
+  (if old-score
+    (if (> next-score old-score)
+      next-result
+      old-result)
+    next-result))
 
 (defn starta []
   (println "Starting solution nr. 15a")
   (with-open [rdr (io/reader "resources/15/input.txt")]
-    (let [ingredients (reduce add-ingredient {} (line-seq rdr))
-          all-weight-combinations (generate-all-weight-combinations (keys ingredients) 100)]
-      (->> all-weight-combinations
+    (let [ingredients (reduce add-ingredient {} (line-seq rdr))]
+      (->> (generate-all-weight-combinations (keys ingredients) 100)
            (map (partial recipe-score ingredients))
-           (reduce (fn [{old-score :score :as old-result} {next-score :score :as next-result} ]
-                     (if old-score
-                       (if (> next-score old-score)
-                         next-result
-                         old-result)
-                       next-result)) nil)
+           (reduce keep-better-result nil)
            (println)))))
