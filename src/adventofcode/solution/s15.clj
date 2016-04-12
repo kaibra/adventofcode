@@ -64,28 +64,13 @@
   (println "Starting solution nr. 15a")
   (with-open [rdr (io/reader "resources/15/input.txt")]
     (let [ingredients (reduce add-ingredient {} (line-seq rdr))
-          recipe-fn (partial recipe-score ingredients)
-          thread-pool-size 4
-          out-chan (async/chan 1000000)
-          work-chan (async/chan (* thread-pool-size 2))
-          elements-put (atom 0)
-          best-result (atom nil)
           all-weight-combinations (generate-all-weight-combinations (keys ingredients) 100)]
-      (async/pipeline thread-pool-size out-chan (map recipe-fn) work-chan)
-
-      (doseq [w-comb all-weight-combinations]
-        (swap! elements-put inc)
-        (println "put" w-comb)
-        (async/>!! work-chan w-comb))
-
-      (doseq [r (range 0 @elements-put)]
-        (let [{next-score :score :as next-result} (async/<!! out-chan)]
-          (swap! best-result (fn [{old-score :score :as old-result}]
-                               (if old-score
-                                 (if (> next-score old-score)
-                                   next-result
-                                   old-result)
-                                 next-result)))))
-
-      (println @best-result))
-    ))
+      (->> all-weight-combinations
+           (map (partial recipe-score ingredients))
+           (reduce (fn [{old-score :score :as old-result} {next-score :score :as next-result} ]
+                     (if old-score
+                       (if (> next-score old-score)
+                         next-result
+                         old-result)
+                       next-result)) nil)
+           (println)))))
