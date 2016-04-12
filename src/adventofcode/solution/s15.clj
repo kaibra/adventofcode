@@ -6,7 +6,7 @@
    :durability i-durability
    :flavor     i-flavor
    :texture    i-texture
-   ;:calories   i-calories
+   :calories   i-calories
    })
 
 (defn add-ingredient [ingredients line]
@@ -31,10 +31,11 @@
     0))
 
 (defn recipe-score [ingredients weights]
-  (let [ing-properties (keys (ingredient-props 0 0 0 0 0))
+  (let [ing-properties [:capacity :durability :flavor :texture]
         total-score (->> (map (partial ingredient-prop-score ingredients weights) ing-properties) (apply *))]
-    {:score   total-score
-     :weights weights}))
+    {:score        total-score
+     :weights      weights
+     :calories500? (= 500 (ingredient-prop-score ingredients weights :calories))}))
 
 (defn generate-all-weight-combinations
   [all-ingredient-names max-val]
@@ -59,6 +60,17 @@
       old-result)
     next-result))
 
+(defn keep-better-result-with-500-cals [{old-score :score :as old-result}
+                                        {next-cals-500? :calories500? next-score :score :as next-result}]
+  (if next-cals-500?
+    (if old-score
+      (if (> next-score old-score)
+        next-result
+        old-result)
+      next-result)
+    old-result))
+
+
 (defn starta []
   (println "Starting solution nr. 15a")
   (with-open [rdr (io/reader "resources/15/input.txt")]
@@ -66,4 +78,14 @@
       (->> (generate-all-weight-combinations (keys ingredients) 100)
            (map (partial recipe-score ingredients))
            (reduce keep-better-result nil)
+           (println)))))
+
+(defn startb []
+  (println "Starting solution nr. 15b")
+  (with-open [rdr (io/reader "resources/15/input.txt")]
+    (let [ingredients (reduce add-ingredient {} (line-seq rdr))]
+      (println ingredients)
+      (->> (generate-all-weight-combinations (keys ingredients) 100)
+           (map (partial recipe-score ingredients))
+           (reduce keep-better-result-with-500-cals nil)
            (println)))))
