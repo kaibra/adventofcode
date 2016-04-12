@@ -31,16 +31,10 @@
     0))
 
 (defn recipe-score [ingredients weights]
-  (let [ing-properties (keys (ingredient-props 0 0 0 0 0))]
-    (-> (reduce
-          (fn [score ingredient-prop]
-            (let [prop-score (ingredient-prop-score ingredients weights ingredient-prop)]
-              (* score prop-score)))
-          1
-          ing-properties)
-        ((fn [result]
-           {:score   result
-            :weights weights})))))
+  (let [ing-properties (keys (ingredient-props 0 0 0 0 0))
+        total-score (->> (map (partial ingredient-prop-score ingredients weights) ing-properties) (apply *))]
+    {:score   total-score
+     :weights weights}))
 
 (defn generate-all-weight-combinations
   [all-ingredient-names max-val]
