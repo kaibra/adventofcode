@@ -33,4 +33,12 @@
 (defn startb []
   (println "Starting solution nr. 17b")
   (with-open [rdr (io/reader "resources/17/input.txt")]
-    ))
+    (let [buckets (map #(Integer/parseInt %) (line-seq rdr))
+          input 150
+          results-sorted (->> (all-bucket-combinations buckets input)
+                              (map count)
+                              (sort))]
+      (println
+        (count
+          (filter #(= % (first results-sorted)) results-sorted))))))
+
