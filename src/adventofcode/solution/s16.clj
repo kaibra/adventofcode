@@ -20,34 +20,57 @@
          :cars        (extract line "cars")
          :perfumes    (extract line "perfumes")}))
 
-(defn to-match-score [match entry]
-  (let [score (reduce
-                (fn [score [field fval]]
-                  (if (or
-                        (= fval (get entry field))
-                        (nil? (get entry field)))
-                    (inc score)
-                    score))
-                0
-                match)]
-    {:sue-nr (:sue-nr entry)
-     :score  score}))
+(defn a-score-for-field [entry score [field fval]]
+  (if (or
+        (= fval (get entry field))
+        (nil? (get entry field)))
+    (inc score)
+    score))
+
+(defn a-score [match {:keys [sue-nr] :as entry}]
+  {:sue-nr sue-nr
+   :score  (reduce (partial a-score-for-field entry) 0 match)})
+
+(defn b-score-for-field [entry score [field fval]]
+  (let [comperator-fn (cond
+                        (not (nil? (get #{:cats :trees} field))) >
+                        (not (nil? (get #{:pomeranians :goldfish} field))) <
+                        :default =)]
+    (if (or
+          (nil? (get entry field))
+          (comperator-fn (get entry field) fval))
+      (inc score)
+      score)))
+
+(defn b-score [match {:keys [sue-nr] :as entry}]
+  {:sue-nr sue-nr
+   :score  (reduce (partial b-score-for-field entry) 0 match)})
+
+(def match {:children    3
+            :cats        7
+            :samoyeds    2
+            :pomeranians 3
+            :akitas      0
+            :vizslas     0
+            :goldfish    5
+            :trees       3
+            :cars        2
+            :perfumes    1})
 
 (defn starta []
   (println "Starting solution nr. 16a")
   (with-open [rdr (io/reader "resources/16/input.txt")]
-    (let [sues (reduce parse-sue [] (line-seq rdr))
-          match {:children    3
-                 :cats        7
-                 :samoyeds    2
-                 :pomeranians 3
-                 :akitas      0
-                 :vizslas     0
-                 :goldfish    5
-                 :trees       3
-                 :cars        2
-                 :perfumes    1}]
-      (->> (map (partial to-match-score match) sues)
+    (let [sues (reduce parse-sue [] (line-seq rdr))]
+      (->> (map (partial a-score match) sues)
+           (sort-by :score)
+           (last)
+           (println)))))
+
+(defn startb []
+  (println "Starting solution nr. 16b")
+  (with-open [rdr (io/reader "resources/16/input.txt")]
+    (let [sues (reduce parse-sue [] (line-seq rdr))]
+      (->> (map (partial b-score match) sues)
            (sort-by :score)
            (last)
            (println)))))
