@@ -66,4 +66,5 @@
       (= (first args) "17a") (sol17/starta)
       (= (first args) "17b") (sol17/startb)
       (= (first args) "18a") (sol18/starta)
+      (= (first args) "18b") (sol18/startb)
       :default (println "nothing to do"))))
