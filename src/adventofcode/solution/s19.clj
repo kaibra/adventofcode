@@ -37,3 +37,29 @@
           (distinct)
           (count)
           (println)))))
+
+(defn rand-result [results]
+  (nth results (rand-int (count results))))
+
+(defn random-single-path [replacement-rules depth start-molecule]
+  (let [results (-> (mapcat (partial molecules-for-replacement-rule start-molecule) replacement-rules) (distinct))]
+    (if (empty? results)
+      {:molecule start-molecule
+       :depth    depth}
+      (random-single-path replacement-rules (inc depth) (rand-result results)))))
+
+(defn startb []
+  (println "Starting solution nr. 19b")
+  (with-open [rdr (io/reader "resources/19/input.txt")]
+    (let [start-molecule "CRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr"
+          replacement-rules (reduce parse-replacement-rule [] (line-seq rdr))
+          reverse-replacement-rules (map (fn [[k v]] [v k]) replacement-rules)
+          start-depth 0
+          best-result (atom 500)]
+      (doseq [_ (range 0 100)]
+        (let [{:keys [molecule depth]} (random-single-path reverse-replacement-rules start-depth start-molecule)]
+          (when (and
+                  (= molecule "e")
+                  (< depth @best-result))
+            (reset! best-result depth))))
+      (println "Found best result: " @best-result))))

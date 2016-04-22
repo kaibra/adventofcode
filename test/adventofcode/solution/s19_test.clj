@@ -34,3 +34,17 @@
            (sol19/molecules-for-replacement-rule "HOH" ["H" "OH"])))
     (is (= ["HHHH"]
            (sol19/molecules-for-replacement-rule "HOH" ["O" "HH"])))))
+
+
+(deftest a-random-result
+  (testing "should return a radnom result"
+    (is (= false
+           (nil? (get #{"A" "B" "C"}
+                      (sol19/rand-result ["A" "B" "C"])))))))
+
+(deftest a-random-path
+
+  (testing "should find a random path"
+    (let [result (sol19/random-single-path [["A" "B"] ["A" "C"]] 1 "A")]
+      (is (or (= "B" result)
+              (= "C" result))))))
