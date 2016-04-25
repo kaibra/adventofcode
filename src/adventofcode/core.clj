@@ -20,6 +20,7 @@
     [adventofcode.solution.s18 :as sol18]
     [adventofcode.solution.s19 :as sol19]
     [adventofcode.solution.s20 :as sol20]
+    [adventofcode.solution.s21 :as sol21]
     )
   (:gen-class))
 
@@ -73,4 +74,5 @@
       (= (first args) "19b") (sol19/startb)
       (= (first args) "20a") (sol20/starta)
       (= (first args) "20b") (sol20/startb)
+      (= (first args) "21a") (sol21/starta)
       :default (println "nothing to do"))))
