@@ -7,7 +7,8 @@
     (let [the-boss {:armor      100
                     :damage     40
                     :hit-points 100}]
-      (is (= nil
+      (is (= {:cost 30
+              :win  :boss}
              (sol21/to-game-results the-boss
                                     [(sol21/item "A" 10 5 5)
                                      (sol21/item "B" 20 2 2)])))
@@ -24,4 +25,3 @@
             :damage     7}
            (sol21/to-player-conf [(sol21/item "A" 10 5 5)
                                   (sol21/item "B" 20 2 2)])))))
-

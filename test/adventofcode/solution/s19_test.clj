@@ -43,8 +43,7 @@
                       (sol19/rand-result ["A" "B" "C"])))))))
 
 (deftest a-random-path
-
   (testing "should find a random path"
-    (let [result (sol19/random-single-path [["A" "B"] ["A" "C"]] 1 "A")]
+    (let [result (:molecule (sol19/random-single-path [["A" "B"] ["A" "C"]] 1 "A"))]
       (is (or (= "B" result)
               (= "C" result))))))

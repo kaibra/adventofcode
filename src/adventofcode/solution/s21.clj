@@ -36,7 +36,9 @@
   (map (fn [w] [w]) weapons))
 
 (def all-armor-choices
-  (combo/combinations armor 1))
+  (conj
+    (map (fn [w] [w]) armor)
+    []))
 
 (def all-rings-choices
   (mapcat
@@ -67,18 +69,29 @@
         boss-attack (max (- b-damage armor) 1)
         player-rounds (Math/round (float (/ b-hit-points player-attack)))
         boss-rounds (Math/round (float (/ hit-points boss-attack)))]
-    (when (<= player-rounds boss-rounds)
-      {:win  :player
-       :cost cost})))
+    (if (<= player-rounds boss-rounds)
+      {:win          :player
+       :cost         cost}
+      {:win          :boss
+       :cost         cost})))
+
+(def the-boss
+  {:hit-points 109
+   :damage     8
+   :armor      2})
 
 (defn starta []
   (println "Starting solution nr. 21a")
-  (let [the-boss {:hit-points 109
-                  :damage     8
-                  :armor      2}]
+  (let [results (map (partial to-game-results the-boss) all-player-conf)]
     (println
       (first
         (sort-by :cost
-                 (keep (partial to-game-results the-boss) all-player-conf))))))
+                 (filter #(= :player (:win %)) results))))))
 
-
+(defn startb []
+  (println "Starting solution nr. 21b")
+  (let [results (map (partial to-game-results the-boss) all-player-conf)]
+    (println
+      (last
+        (sort-by :cost
+                 (filter #(= :boss (:win %)) results))))))
