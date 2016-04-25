@@ -1,6 +1,5 @@
 (ns adventofcode.solution.s22)
 
-
 (defn handle-turns [player spell-name]
   (let [turns-left (get-in @player [:spells spell-name :turns-left])]
     (if (= turns-left 1)
@@ -87,7 +86,6 @@
             all-spells-p-can-cast (filter (fn [s] (nil? (get still-running-spells s))) all-spells-player-can-afford)
             spell-name (nth all-spells-p-can-cast (rand-int (count all-spells-p-can-cast)))
             {:keys [cost effect instant-effect]} (get spells spell-name)]
-        (print-hist "could cast " all-spells-p-can-cast)
         (swap! player update :mana - cost)
         (swap! mana-spend + cost)
         (if instant-effect
@@ -97,7 +95,7 @@
             (swap! player assoc-in [:spells spell-name] {:turns-left turns
                                                          :effect-fn  effect-fn})))))))
 
-(defn run-the-game []
+(defn run-the-game [isb?]
   (let [mana-spend (atom 0)
         history (atom "")
         print-hist (fn [& args] (swap! history str (apply str args) "\n"))
@@ -105,38 +103,55 @@
         boss (atom the-boss)]
     (loop [iteration 1
            turn :player]
-      (print-hist)
-      (print-hist "-- " (name turn) " turn --")
-      (apply-all-running-effects! player boss print-hist)
-      (print-hist "- Player has " (:hp @player) " hit points, " (:armor @player) " armor, " (:mana @player) " mana")
-      (print-hist "- Boss has " (:hp @boss) " hit points")
+
+      (when (and (= turn :player) isb?)
+        (swap! player update :hp dec))
 
       (if-let [winner (there-is-a-winnder? player boss)]
         {:winner     winner
          :mana-spend @mana-spend
-         :history @history
+         :history    @history
          :iteration  iteration}
         (do
-          (case turn
-            :boss (boss-move boss player print-hist)
-            :player (player-move player boss mana-spend print-hist))
-          (recur (inc iteration) (switch-turn turn)))))))
+          (print-hist)
+          (print-hist "-- " (name turn) " turn --")
+          (apply-all-running-effects! player boss print-hist)
+          (print-hist "- Player has " (:hp @player) " hit points, " (:armor @player) " armor, " (:mana @player) " mana")
+          (print-hist "- Boss has " (:hp @boss) " hit points")
 
-(defn starta []
-  (println "Starting solution nr. 22a")
+          (if-let [winner (there-is-a-winnder? player boss)]
+            {:winner     winner
+             :mana-spend @mana-spend
+             :history    @history
+             :iteration  iteration}
+            (do
+              (case turn
+                :boss (boss-move boss player print-hist)
+                :player (player-move player boss mana-spend print-hist))
+              (recur (inc iteration) (switch-turn turn)))))))))
+
+
+(defn the-secret-of-mana [& {:keys [isb?] :or {:isb? false}}]
   (loop [least-mana-spend 99999999
          game 1
          the-history ""
          wins {:player 0
                :boss   0}]
-    (if (> game 10000)
+    (if (> game 100000)
       (do
         (println least-mana-spend)
-        (println wins)
-        (println the-history))
-      (let [{:keys [winner mana-spend history]} (run-the-game)]
+        (println wins))
+      (let [{:keys [winner mana-spend history]} (run-the-game isb?)]
         (if (and
               (= winner :player)
               (< mana-spend least-mana-spend))
           (recur mana-spend (inc game) history (update wins winner inc))
           (recur least-mana-spend (inc game) the-history (update wins winner inc)))))))
+
+(defn starta []
+  (println "Starting solution nr. 22a")
+  (the-secret-of-mana))
+
+(defn startb []
+  (println "Starting solution nr. 22b")
+  (the-secret-of-mana :isb? true))
