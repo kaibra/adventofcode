@@ -54,13 +54,10 @@
     (str/starts-with? line "jie") (parse-jie line)
     (str/starts-with? line "jio") (parse-jio line)))
 
-(defn starta []
-  (println "Starting solution nr. 23a")
+(defn run-the-machine [starting-point]
   (with-open [rdr (io/reader "resources/23/input.txt")]
     (let [instructions (into [] (map parse-instruction (line-seq rdr)))]
-      (loop [registeres {"a" 0
-                         "b" 0
-                         :pos 0}
+      (loop [registeres starting-point
              run 1]
         (let [current-pos (:pos registeres)]
           (println run "  " current-pos "  " registeres)
@@ -69,3 +66,15 @@
                 (< current-pos (count instructions)))
             (recur ((get instructions current-pos) registeres) (inc run))
             (println "End: " registeres)))))))
+
+(defn starta []
+  (println "Starting solution nr. 23a")
+  (run-the-machine {"a" 0
+                    "b" 0
+                    :pos 0}))
+
+(defn startb []
+  (println "Starting solution nr. 23b")
+  (run-the-machine {"a" 1
+                    "b" 0
+                    :pos 0}))
